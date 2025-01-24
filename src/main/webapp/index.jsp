@@ -132,10 +132,9 @@
 <body>
 <div class="container">
     <h1>Task Manager</h1>
-
     <div>
         <form action="TaskServlet" method="get">
-            <input type="text" name="search" placeholder="Search by task name..." style="padding: 10px; width: 80%; margin-bottom: 20px; border: 1px solid #ddd; border-radius: 5px;">
+            <input type="text" name="search" placeholder="Search task" style="padding: 10px; width: 80%; margin-bottom: 20px; border: 1px solid #ddd; border-radius: 5px;">
             <button type="submit" style="padding: 10px; background-color: #0275d8; color: white; border: none; border-radius: 5px; cursor: pointer;">
                 Search
             </button>
@@ -202,6 +201,11 @@
                 </c:if>
             </c:forEach>
         </ul>
+    </div>
+    <div style="margin-bottom: 20px;">
+        <a href="TaskServlet?action=download" style="text-decoration: none; padding: 10px 15px; background-color: #0275d8; color: white; border-radius: 5px;">
+            Download Tasks as CSV
+        </a>
     </div>
 </div>
 </body>

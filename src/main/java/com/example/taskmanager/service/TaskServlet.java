@@ -10,6 +10,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.transaction.Transactional;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -23,6 +24,12 @@ public class TaskServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         List<Task> tasks = taskService.getAllTasks();
+
+        String action = request.getParameter("action");
+        if ("download".equalsIgnoreCase(action)) {
+            downloadTasksAsCSV(response);
+            return;
+        }
 
         String search = request.getParameter("search");
         if (search != null && !search.trim().isEmpty()) {
@@ -63,6 +70,21 @@ public class TaskServlet extends HttpServlet {
         response.sendRedirect("TaskServlet");
     }
 
-
+    private void downloadTasksAsCSV(HttpServletResponse response) throws IOException {
+        List<Task> tasks = taskService.getAllTasks();
+        response.setContentType("text/csv");
+        response.setHeader("Content-Disposition", "attachment;filename=tasks.csv");
+        try (PrintWriter writer = response.getWriter()) {
+            writer.println("ID,Name,Description,Priority,Completed");
+            for (Task task : tasks) {
+                writer.printf("%d,%s,%s,%s,%s,%s%n",
+                        task.getId(),
+                        task.getName(),
+                        task.getDescription(),
+                        task.getPriority(),
+                        task.isCompleted());
+            }
+        }
+    }
 }
 
