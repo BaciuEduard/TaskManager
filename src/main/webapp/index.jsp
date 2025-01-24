@@ -133,6 +133,15 @@
 <div class="container">
     <h1>Task Manager</h1>
 
+    <div>
+        <form action="TaskServlet" method="get">
+            <input type="text" name="search" placeholder="Search by task name..." style="padding: 10px; width: 80%; margin-bottom: 20px; border: 1px solid #ddd; border-radius: 5px;">
+            <button type="submit" style="padding: 10px; background-color: #0275d8; color: white; border: none; border-radius: 5px; cursor: pointer;">
+                Search
+            </button>
+        </form>
+    </div>
+
     <div id="task-form">
         <form action="TaskServlet" method="post">
             <input type="text" id="name" name="name" placeholder="Task Name" required>

@@ -12,6 +12,7 @@ import jakarta.transaction.Transactional;
 import java.io.IOException;
 import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @WebServlet("/TaskServlet")
 public class TaskServlet extends HttpServlet {
@@ -22,6 +23,13 @@ public class TaskServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         List<Task> tasks = taskService.getAllTasks();
+
+        String search = request.getParameter("search");
+        if (search != null && !search.trim().isEmpty()) {
+            tasks = tasks.stream()
+                    .filter(task -> task.getName().toLowerCase().contains(search.toLowerCase()))
+                    .collect(Collectors.toList());
+        }
         String sort = request.getParameter("sort");
         if ("name".equalsIgnoreCase(sort)) {
             tasks.sort(Comparator.comparing(Task::getName));
@@ -32,7 +40,7 @@ public class TaskServlet extends HttpServlet {
 
     @Override
     @Transactional
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String method = request.getParameter("_method");
         if ("DELETE".equals(method)) {
             int id = Integer.parseInt(request.getParameter("id"));
